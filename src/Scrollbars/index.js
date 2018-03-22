@@ -508,6 +508,7 @@ export default class Scrollbars extends Component {
             autoHeightMax,
             style,
             children,
+            dir,
             ...props
         } = this.props;
         /* eslint-enable no-unused-vars */
@@ -527,7 +528,8 @@ export default class Scrollbars extends Component {
         const viewStyle = {
             ...viewStyleDefault,
             // Hide scrollbars by setting a negative margin
-            marginRight: scrollbarWidth ? -scrollbarWidth : 0,
+            marginRight: scrollbarWidth && dir !== 'rtl' ? -scrollbarWidth : 0,
+            marginLeft: scrollbarWidth && dir === 'rtl' ? -scrollbarWidth : 0,
             marginBottom: scrollbarWidth ? -scrollbarWidth : 0,
             ...(autoHeight && {
                 ...viewStyleAutoHeight,
@@ -584,7 +586,7 @@ export default class Scrollbars extends Component {
                 )
             ),
             cloneElement(
-                renderTrackVertical({ style: trackVerticalStyle }),
+                renderTrackVertical({ style: trackVerticalStyle }, dir),
                 { key: 'trackVertical', ref: (ref) => { this.trackVertical = ref; } },
                 cloneElement(
                     renderThumbVertical({ style: thumbVerticalStyleDefault }),
@@ -625,6 +627,7 @@ Scrollbars.propTypes = {
     universal: PropTypes.bool,
     style: PropTypes.object,
     children: PropTypes.node,
+    dir: PropTypes.string,
 };
 
 Scrollbars.defaultProps = {
@@ -643,4 +646,5 @@ Scrollbars.defaultProps = {
     autoHeightMin: 0,
     autoHeightMax: 200,
     universal: false,
+    dir: 'ltr'
 };
